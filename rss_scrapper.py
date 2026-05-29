@@ -116,7 +116,7 @@ try:
     print(f"Successfully processed {len(master_articles_list)} articles into the database!")
 
 except Exception as error:
-    # 2. THIS WILL NOW PRINT THE REAL ERROR
+    # 2. Print the error if there's an issue when connecting to the database
     print(f"An error occurred while connecting to the database: {error}")
 
 finally:
