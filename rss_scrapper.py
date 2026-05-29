@@ -126,6 +126,3 @@ finally:
     if connection:
         connection.close()
         print("Database connection closed.")
-
-
-DATABASE_URL="postgresql://postgres.vjezcfpasowxaparocou:loXxFy2B3xbu@aws-1-ap-south-1.pooler.supabase.com:6543/postgres"
