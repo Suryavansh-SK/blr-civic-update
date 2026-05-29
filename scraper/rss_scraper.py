@@ -19,8 +19,9 @@ import feedparser
 import json
 from bs4 import BeautifulSoup
 
-# Load the secure variables from your .env file
-load_dotenv()
+# Load the secure variables from your .env file ->
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))         # Find the absolute path to the directory where this script lives
+load_dotenv(os.path.join(SCRIPT_DIR, '.env'))                   # Tell dotenv to load the .env file specifically from that directory      
 
 # 1. Defining the list RSS source URLs to be parsed
 rss_urls = [
