@@ -12,6 +12,10 @@ jobs:
   scrape-and-push:
     runs-on: ubuntu-latest
 
+    # This globally forces the runner to use Node 24, silencing the deprecation warning. Just a future proof measure since Node.js 20 will be removed from the runner on September 16th, 2026
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
