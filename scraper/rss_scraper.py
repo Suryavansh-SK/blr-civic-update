@@ -24,10 +24,29 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))         # Find the absol
 load_dotenv(os.path.join(SCRIPT_DIR, '.env'))                   # Tell dotenv to load the .env file specifically from that directory      
 
 # 1. Defining the list RSS source URLs to be parsed
-rss_urls = [
-    "https://timesofindia.indiatimes.com/rssfeeds/-2128833038.cms",
-    "https://www.thehindu.com/news/cities/feeder/default.rss"
-    ]
+# Configuration for targeted Bengaluru civic feeds
+feed_sources = [
+    {
+        "name": "The Hindu",
+        "url": "https://www.thehindu.com/news/cities/bangalore/feeder/default.rss",
+        "default_category": "General Civic"
+    },
+    {
+        "name": "Times of India",
+        "url": "https://timesofindia.indiatimes.com/rssfeeds/-2128833038.cms",
+        "default_category": "General Civic"
+    },
+    {
+        "name": "Google Alerts - IMD",
+        "url": "https://www.google.com/alerts/feeds/11407972214205074111/8618311723541478250",
+        "default_category": "Weather Alert"
+    },
+    {
+        "name": "Google Alerts - Disruptions",
+        "url": "https://www.google.com/alerts/feeds/11407972214205074111/7630855859363259301",
+        "default_category": "Infrastructure"
+    }
+]
 
 # 2. Master Storage list for all the entries from the RSS feeds
 
@@ -44,11 +63,11 @@ civic_keywords = [
     ]
 
 # 3. Looping through the list of RSS URLs and parsing each feed
-for url in rss_urls:
-    rss_feed = feedparser.parse(url)                                #parses the RSS feed from the given URL and stores it in the variable rss_feed
+for source in feed_sources:                                                   #loops through each source in the feed_sources list
+    feed = feedparser.parse(source['url'])                                #parses the RSS feed from the given URL and stores it in the variable rss_feed
 
     # 3.1 Looping through each entry in the parsed RSS feed and cleaning the data
-    for entry in rss_feed.entries:                                  #loops through each entry (post) in the parsed RSS feed
+    for entry in feed.entries:                                  #loops through each entry (post) in the parsed RSS feed
 
         # 3.1.1 Cleaning the description of the entry by removing any HTML tags and special characters using BeautifulSoup. This ensures that we have clean and readable text for the description of each article.
         description_soup = BeautifulSoup(entry.description, "html.parser")          #Creates a BeautifulSoup object by parsing the description of the entry as HTML
