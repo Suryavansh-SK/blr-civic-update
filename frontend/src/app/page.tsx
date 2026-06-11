@@ -60,8 +60,8 @@ export default function Home() {
                     Civic Source
                   </span>
                   <span>·</span>
-                  <time dateTime={item.published}>
-                    {new Date(item.published).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  <time dateTime={item.published_parsed}>
+                    {new Date(item.published_parsed).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                   </time>
                   <span>·</span>
                   <span className="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full text-xs font-medium">

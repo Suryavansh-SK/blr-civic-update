@@ -32,12 +32,16 @@ def get_civic_news():
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         
         # Fetch the latest 50 articles
-        cursor.execute("SELECT * FROM civic_news ORDER BY published DESC LIMIT 50;")
+        cursor.execute("SELECT * FROM civic_news ORDER BY published_parsed DESC LIMIT 50;")
         records = cursor.fetchall()
         
         cursor.close()
         conn.close()
         
+        # Format published_parsed as ISO string for frontend compatibility
+        # for record in records:
+        #     record.update({"published_parsed": record["published_parsed"].isoformat()})
+        #     # record['published_parsed'] = record['published_parsed'].isoformat()
         return records
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
