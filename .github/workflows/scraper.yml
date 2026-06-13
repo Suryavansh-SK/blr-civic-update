@@ -1,9 +1,9 @@
 name: Hourly Civic RSS Scraper
 
 on:
-  # Runs at minute 0 past every hour
+  # Runs at minute 40 past every hour. This is to bypass peak traffic cron jobs that run at 0 minutes on github servers.
   schedule:
-    - cron: '0 * * * *'
+    - cron: '40 * * * *'
   
   # Allows you to click a button in GitHub to run it manually
   workflow_dispatch:

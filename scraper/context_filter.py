@@ -15,7 +15,7 @@ DETERMINISTIC_KEYWORDS = [
     "bangalore", "bengaluru", "ooru", "namma ooru", "blr", "tech capital of india", "silicon valley of india", "it hub",
     "bbmp", "bescom", "bwssb", "bmrc", "namma metro", "bmtc", "bmrcl", "gba",
     "btp", "bengaluru traffic police", "bcp", "bengaluru police", "bengaluru city police",
-    "kr pura", "kr puram", "church street", "koramangala", "whitefield", "electronic city", "marathahalli", "yelahanka", "hebbal",
+    "north bengaluru", "south bengaluru", "east bengaluru", "west bengaluru", "kr pura", "kr puram", "church street", "koramangala", "whitefield", "electronic city", "marathahalli", "yelahanka", "hebbal",
     "btm layout", "jp nagar", "indiranagar", "hsr layout"
     ]
 
