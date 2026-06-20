@@ -35,23 +35,31 @@ DISRUPTION_KEYWORDS = [
     "strike", "protest", "dharna", "agitation", "rally", "march"
     ]
 
-SYSTEM_PROMPT = """
+SYSTEM_PROMPT = f"""
         You are a precise civic data classifier for Bengaluru or Bangalore. Analyze the provided news headline and description. 
-        Determine if it represents an actionable, ongoing, or persistent physical disruption to everyday life in Bengaluru.
+        Determine if it represents an actionable, ongoing, or officially announced physical disruption to everyday public life.
 
         Use this list of targeted civic concepts and organizations as a guide for what falls within our monitoring scope:
-        {", ".join(civic_keywords)}
+        {", ".join(DETERMINISTIC_KEYWORDS)}
+        {", ".join(DISRUPTION_KEYWORDS)}
 
-        Strict Rules:
-        1. GEOGRAPHY: The disruption MUST be inside Bengaluru. CONFIRM location existance inside Bengaluru before going ahead when locations are mentioned. If the landmarks, roads, or areas mentioned are outside Bengaluru, set is_disruption to false. Make no mistakes.
-        2. ACTIONABILITY: Focus on ongoing, upcoming, or persistent disruptions. Exclude resolved, one-off historical events unless they cause lasting infrastructure damage.
+        Strict Rules for REJECTION (Set is_disruption to false if ANY apply):
+        1. GEOGRAPHY: The disruption is outside Bengaluru.
+        2. ACCIDENTS & TRAGEDIES: Standard road accidents, localized fires, or fatal incidents (e.g., workers injured, bus accidents) are NOT disruptions UNLESS the text explicitly states they cause massive, persistent traffic halts or require recovery (e.g., cranes removing a 16-wheeler).
+        3. ADMINISTRATIVE & POLITICAL: General complaints about infrastructure (e.g., politicians talking about potholes), civic administrative news, or delays in future construction approvals (e.g., "no new metro lines") are NOT active physical disruptions.
+        4. ORGANIZED PROTESTS: Protests, rallies, and strikes are NOT disruptions UNLESS the text explicitly states they are actively blocking roads, highways, or public transit. Assume protests are in designated enclosures otherwise.
+
+        Strict Rules for ACCEPTANCE (Set is_disruption to true):
+        1. The event is an explicitly announced public service halt (e.g., scheduled BWSSB water cut, BESCOM power outage, BMTC strike) by civic bodies.
+        2. The event is a verified, severe physical blockage actively halting transit or city functions (e.g., flooded underpasses, massive road cave-ins).
 
         You must respond strictly in JSON format matching this exact schema:
+        Note: The confidence_score must be a floating point number between 0.0 and 1.0 indicating your certainty.
         {{
         "is_disruption": true or false,
         "category": "Traffic" | "Power" | "Water" | "Weather" | "Infrastructure" | "None",
-        "confidence_score": 0.0 to 1.0,
-        "reasoning": "A one sentence explanation focusing on location and actionability."
+        "confidence_score": 0.85,
+        "reasoning": "A one sentence explanation of your decision or reasoning."
         }}
 """
 # Using double curly braces becasue we want python to treat them as literal text instead of trying to evaluate them as code blocks.
@@ -77,7 +85,12 @@ def get_disruption_context(headline, description):
         # Check if the model is uncertain about its decision
         confidence = groq_result.get("confidence_score", 0.0)                   # The 0.0 default ensures that if the model's response doesn't include a confidence score, it will be treated as 0 confidence but will not crash the program due to a missing key.
         if confidence < 0.8:
-            print(f" !!! Low confidence from Groq ({confidence}) with result: {groq_result.get('is_disruption')}. Routing to Gemini for review...")
+            reasoning = groq_result.get("reasoning", "No reasoning provided.")
+            print(f"\nLOW CONFIDENCE from Groq:\n"
+                  f"Confidence: {confidence}\n"
+                  f"is_disruption: {groq_result.get('is_disruption')}\n"
+                  f"Reasoning: {reasoning}\n"
+                  f"Routing to Gemini for review...")
             # Raising an error intentionally forces execution into the 'except' block below
             raise ValueError("Confidence score below threshold")
 
