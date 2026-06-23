@@ -130,7 +130,7 @@ try:
             article["link"],
             article["published"],
             article["id"],
-            article["published_parsed"]
+            article["published_parsed"],
             article.get("category", "Update")
         ))
 
