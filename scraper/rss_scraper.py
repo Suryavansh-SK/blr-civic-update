@@ -116,8 +116,8 @@ try:
 
     # The SQL command to insert data safely. Written in 3 lines just for better readability. Computer takes it as one single line.
     insert_query = """
-        INSERT INTO civic_news (title, description, link, published, rss_id, published_parsed)
-        VALUES (%s, %s, %s, %s, %s, %s)
+        INSERT INTO civic_news (title, description, link, published, rss_id, published_parsed, category)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (link) DO NOTHING;
     """
     #ON CONFLICT ensures that if an article with the same link already exists in the database, it will not be inserted again, preventing duplicates.
