@@ -27,7 +27,7 @@ DISRUPTION_KEYWORDS = [
     "bus delay", "bus disruption", "bus maintenance", "bus strike", "bmtc strike",
     "garbage", "waste", "garbage collection", "garbage strike", "garbage disruption", "sanitation",
     "water cut", "water disruption", "water work", "water closed", "water supply", "water shortage",
-    "power cut", "power disruption", "grid work", "grid maintenance", "scheduled power cut", "scheduled power disruption", "scheduled grid work", "scheduled grid maintenance", "scheduled power cut", "scheduled power disruption",
+    "power cut", "power outage", "power disruption", "grid work", "grid maintenance", "scheduled power cut", "scheduled power disruption", "scheduled grid work", "scheduled grid maintenance", "scheduled power cut", "scheduled power disruption", "scheduled power outage",
     "holiday", "public holiday", "bank holiday", "school holiday", "festival", "event hliday",
     "bandh", "statewide", "city wide", "citywide",
     "monsoon alert", "weather disruption", "flooding", "water logging",
@@ -53,11 +53,12 @@ SYSTEM_PROMPT = f"""
         1. The event is an explicitly announced public service halt (e.g., scheduled BWSSB water cut, BESCOM power outage, BMTC strike) by civic bodies.
         2. The event is a verified, severe physical blockage actively halting transit or city functions (e.g., flooded underpasses, massive road cave-ins).
 
+        Allowed categories are exactly: "Traffic", "Power", "Water", "Weather", "Infrastructure", "Public Transport", "Others", "Update"
         You must respond strictly in JSON format matching this exact schema:
         Note: The confidence_score must be a floating point number between 0.0 and 1.0 indicating your certainty.
         {{
         "is_disruption": true or false,
-        "category": "Traffic" | "Power" | "Water" | "Weather" | "Infrastructure" | "None",
+        "category": "Traffic",
         "confidence_score": 0.85,
         "reasoning": "A one sentence explanation of your decision or reasoning."
         }}

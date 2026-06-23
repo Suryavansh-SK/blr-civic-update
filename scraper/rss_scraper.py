@@ -79,7 +79,7 @@ for source in feed_sources:                                                   #l
         has_location = any(loc in title_desc_lower for loc in DETERMINISTIC_KEYWORDS)       #Checking for any location keywords
         has_disruption = any(dis in title_desc_lower for dis in DISRUPTION_KEYWORDS)        #Checking for any disruption keywords
 
-        if has_location and has_disruption:                                                  # We need the keyword in either title or description. Not mandatorily on both.
+        if has_location and has_disruption:                                                 # We need the keyword in either title or description. Not mandatorily on both.
             print(f"\nPotential civic disruption found: {article_data['title']}")
 
             # 2.2.1 Call the LLM context module
@@ -87,6 +87,7 @@ for source in feed_sources:                                                   #l
 
             if context.get("is_disruption") == True:
                 print(f" ACCEPTED ({context['category']}): {entry.title}")
+                article_data["category"] = context.get("category", "Update")                # Store the category
                 master_articles_list.append(article_data)
             else:
                 print(f"REJECTED (Failed Context): {article_data['title']}")
@@ -130,6 +131,7 @@ try:
             article["published"],
             article["id"],
             article["published_parsed"]
+            article.get("category", "Update")
         ))
 
     # Save the changes to the database
