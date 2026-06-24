@@ -22,15 +22,15 @@ export default function Home() {
   useEffect(() => {
     setMounted(true)
     
-    // We use environment variables so we do not hardcode sensitive keys into the repository
-    const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    // The "as string" assertion tells TypeScript to stop worrying about undefined values
+    const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL as string
+    const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
 
     // Fetching directly from the Supabase REST API, ordering by published date
     fetch(`${SUPABASE_URL}/rest/v1/civic_news?select=*&order=published.desc`, {
       headers: {
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
       }
     })
       .then(res => res.json())
