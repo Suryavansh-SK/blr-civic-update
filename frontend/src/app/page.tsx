@@ -2,12 +2,10 @@
 
 import { useState, useEffect } from 'react'
 
-// Helper function to format the date to DD/MMM/YYYY
 const formatDate = (dateString: string) => {
   if (!dateString) return 'Unknown Date'
   const date = new Date(dateString)
   
-  // Fallback if the date is still somehow invalid
   if (isNaN(date.getTime())) return 'Recent' 
 
   const day = String(date.getDate()).padStart(2, '0')
@@ -23,7 +21,18 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true)
-    fetch('http://127.0.0.1:8000/news')
+    
+    // We use environment variables so we do not hardcode sensitive keys into the repository
+    const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    // Fetching directly from the Supabase REST API, ordering by published date
+    fetch(`${SUPABASE_URL}/rest/v1/civic_news?select=*&order=published.desc`, {
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    })
       .then(res => res.json())
       .then(data => setNews(data))
       .catch(err => console.error("Failed to fetch news:", err))
