@@ -85,12 +85,17 @@ for source in feed_sources:                                                   #l
             # 2.2.1 Call the LLM context module
             context = get_disruption_context(entry.title, entry.description)
 
+            # Extract the reasoning from the LLM's response
+            reasoning = context.get("reasoning", "No reasoning provided.")
+
             if context.get("is_disruption") == True:
-                print(f" ACCEPTED ({context['category']}): {entry.title}")
+                print(f"ACCEPTED ({context['category']}): {entry.title}\n"
+                      f"Reasoning: {reasoning}")
                 article_data["category"] = context.get("category", "Update")                # Store the category
                 master_articles_list.append(article_data)
             else:
-                print(f"REJECTED (Failed Context): {article_data['title']}")
+                print(f"REJECTED (Failed Context): {article_data['title']}\n"
+                      f"Reasoning: {reasoning}")
         else:
             print(f"\nSKIPPED (Failed Keyword Pre-filter): {article_data['title']}")
             
