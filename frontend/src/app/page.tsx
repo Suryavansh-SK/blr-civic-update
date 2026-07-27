@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 
 const formatDate = (dateString: string) => {
   if (!dateString) return 'Unknown Date'
@@ -18,6 +19,7 @@ const formatDate = (dateString: string) => {
 export default function Home() {
   const [news, setNews] = useState([])
   const [mounted, setMounted] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -43,8 +45,45 @@ export default function Home() {
   return (
     <main className="max-w-2xl mx-auto min-h-screen bg-[#0a0a0a] border-x border-gray-900">
       
-      <header className="sticky top-0 z-10 backdrop-blur-md bg-black/80 border-b border-gray-800 p-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-white">Bengaluru Civic Updates</h1>
+      <header className="sticky top-0 z-10 backdrop-blur-md bg-black/80 border-b border-gray-800 p-4 flex justify-between items-center relative">
+        
+        {/* Title acts as the persistent Home button */}
+        <Link href="/" className="text-xl font-bold text-white hover:text-gray-300 transition-colors">
+          Bengaluru Civic Updates
+        </Link>
+
+        {/* Hamburger Icon Button */}
+        <button 
+          onClick={() => setMenuOpen(!menuOpen)} 
+          className="p-2 text-gray-400 hover:text-white transition-colors focus:outline-none"
+          aria-label="Toggle menu"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {menuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
+
+        {/* Dropdown Menu */}
+        {menuOpen && (
+          <nav className="absolute top-full right-4 mt-2 w-48 bg-[#111] border border-gray-800 rounded-xl shadow-2xl py-2 flex flex-col z-20">
+             <Link 
+               href="/about" 
+               className="px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
+             >
+               About
+             </Link>
+             <Link 
+               href="/changelogs" 
+               className="px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
+             >
+               Changelogs
+             </Link>
+          </nav>
+        )}
       </header>
 
       <div className="flex flex-col gap-4 p-4">
